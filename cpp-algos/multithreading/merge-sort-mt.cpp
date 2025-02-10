@@ -7,7 +7,7 @@ using namespace std;
 
 // multi-threaded sorting utility
 vector<int> mergesort_multi_thread(const vector<int>& nums);
-void thread_sort(const vector<int>& nums, vector<int>& result);
+void thread_sort(const vector<int>& partial_nums, vector<int>& result);
 
 // mergesort 
 vector<int> mergesort(const vector<int>& nums);
@@ -16,10 +16,58 @@ vector<int> merge(const vector<int>& A, const vector<int>& B);
 // debugger
 void print(const vector<int>& nums);
 
+/**
+ * ENTRY POINT OF PROGRAM
+ */
 int main() {
-    vector<int> sorted_res = mergesort({4, 3, 1, 8, 9});
+    vector<int> sorted_res = mergesort_multi_thread({4, 3, 1, 8, 9});
+    print(sorted_res);
+    sorted_res = mergesort_multi_thread(
+        {99, 86, 54, 33, 47, 99, 100, 102, 4, 7, 19, 44, 57, 12, 13, 20, 45, 99, 83, 38}
+    );
     print(sorted_res);
     return 0;
+}
+// ================================
+
+/**
+ * Multithreaded execution of mergesort
+ * 
+ * Due to management overhead of threads, performance boost
+ * only with large collections of data 
+ */
+vector<int> mergesort_multi_thread(const vector<int>& nums) {
+    int n = nums.size();
+    if (n < 10) {
+        cerr << "use single threaded merge sort for this task..." << endl;
+        return {};
+    }
+
+    int one_third = n / 3; 
+    int two_thirds = one_third + one_third;
+    vector<int> arr1(nums.begin(), nums.begin() + one_third);
+    vector<int> arr2(nums.begin() + one_third, nums.begin() + two_thirds);
+    vector<int> arr3(nums.begin() + two_thirds, nums.end());
+    
+    vector<int> res1, res2, res3;
+
+    // Launch 3 threads...
+    thread t1(thread_sort, std::ref(arr1), std::ref(res1)); // NOTE: use std::ref because thread arguments always create a copy by default
+    thread t2(thread_sort, std::ref(arr2), std::ref(res2));
+    thread t3(thread_sort, std::ref(arr3), std::ref(res3));
+
+    // Wait for all 3 to finish...
+    t1.join();
+    t2.join();
+    t3.join();
+
+    // merge and return results
+    return merge(res1, merge(res2, res3));
+}
+
+// utility function: assign sorting task to thread
+void thread_sort(const vector<int>& partial_nums, vector<int>& result) {
+    result = mergesort(partial_nums);
 }
 
 /**
