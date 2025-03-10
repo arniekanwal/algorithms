@@ -2,18 +2,16 @@
 #include <vector>
 #include <algorithm>
 #include <thread>
+#include <functional>
+// #include <chrono>
 
 using namespace std;
 
-// multi-threaded sorting utility
+
 vector<int> mergesort_multi_thread(const vector<int>& nums);
 void thread_sort(const vector<int>& partial_nums, vector<int>& result);
-
-// mergesort 
 vector<int> mergesort(const vector<int>& nums);
 vector<int> merge(const vector<int>& A, const vector<int>& B);
-
-// debugger
 void print(const vector<int>& nums);
 
 /**
@@ -67,6 +65,9 @@ vector<int> mergesort_multi_thread(const vector<int>& nums) {
 
 // utility function: assign sorting task to thread
 void thread_sort(const vector<int>& partial_nums, vector<int>& result) {
+    // Stagger execution (to show threads are not run sequentially)
+    // std::this_thread::sleep_for(std::chrono::milliseconds(100)); 
+    
     result = mergesort(partial_nums);
 }
 
@@ -120,7 +121,14 @@ vector<int> merge(const vector<int>& A, const vector<int>& B) {
  * Debug tool: print contents of vector to stdout
  */
 void print(const vector<int>& nums) {
+    if (nums.empty()) {
+        cout << "list is empty..." << endl;
+        return;
+    }
+    
     for (int x : nums)
         cout << x << " ";
     cout << endl;
 }
+
+
