@@ -29,10 +29,13 @@ int main() {
 // ================================
 
 /**
- * Multithreaded execution of mergesort
+ * @brief Multithreaded version of mergesort
  * 
  * Due to management overhead of threads, performance boost
  * only with large collections of data 
+ * 
+ * @param nums input vector
+ * @return sorted copy of input vec
  */
 vector<int> mergesort_multi_thread(const vector<int>& nums) {
     int n = nums.size();
@@ -63,7 +66,7 @@ vector<int> mergesort_multi_thread(const vector<int>& nums) {
     return merge(res1, merge(res2, res3));
 }
 
-// utility function: assign sorting task to thread
+///@brief utility function: assign sorting task to thread
 void thread_sort(const vector<int>& partial_nums, vector<int>& result) {
     // Stagger execution (to show threads are not run sequentially)
     // std::this_thread::sleep_for(std::chrono::milliseconds(100)); 
@@ -72,7 +75,9 @@ void thread_sort(const vector<int>& partial_nums, vector<int>& result) {
 }
 
 /**
- * Mergesort implementation (recursive divide and conquer)
+ * @brief Mergesort implementation (recursive divide and conquer)
+ * @param nums vector to sort
+ * @return sorted copy of input vector
  */
 vector<int> mergesort(const vector<int>& nums) {
     int l = 0, r = nums.size();
@@ -89,7 +94,11 @@ vector<int> mergesort(const vector<int>& nums) {
 }
 
 /**
- * Merge two vectors in sorted ascending order
+ * @brief Merge two vectors in sorted ascending order
+ * 
+ * @param A sorted lower half 
+ * @param B sorted upper half
+ * @return merged vector
  */
 vector<int> merge(const vector<int>& A, const vector<int>& B) {
     int m = A.size(), n = B.size();
@@ -118,7 +127,8 @@ vector<int> merge(const vector<int>& A, const vector<int>& B) {
 }
 
 /**
- * Debug tool: print contents of vector to stdout
+ * @brief Debug tool: print contents of vector to stdout
+ * @param nums input vector
  */
 void print(const vector<int>& nums) {
     if (nums.empty()) {
