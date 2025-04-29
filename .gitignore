@@ -1,7 +1,11 @@
-
-
-# CPP
+# --- C/C++ ---
 *.out
 *.o
 *.ll
 *.so
+
+# --- Python ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
